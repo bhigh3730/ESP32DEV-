@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Benjamin Hightower - Futuristic Matrix</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      font-family: 'Oxanium', sans-serif;
+      color: #0f0;
+    }
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 1;
+    }
+    .content {
+      position: relative;
+      z-index: 10;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      background: rgba(0,0,0,0.4); /* slight overlay so text pops more */
+    }
+    h1 {
+      font-size: 4.8rem;
+      font-weight: 900;
+      text-shadow: 0 0 20px #0f0, 0 0 40px #0f0;
+      letter-spacing: 8px;
+      margin-bottom: 20px;
+    }
+    .tagline {
+      font-size: 2.2rem;
+      font-weight: 500;
+      text-shadow: 0 0 15px #0f0;
+      margin-bottom: 30px;
+    }
+    .email {
+      font-size: 1.8rem;
+      font-weight: 400;
+    }
+    .email a {
+      color: #0f0;
+      text-decoration: none;
+      transition: all 0.4s;
+    }
+    .email a:hover {
+      color: #00ff41;
+      text-shadow: 0 0 25px #00ff41;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="matrix"></canvas>
+
+  <div class="content">
+    <h1>BENJAMIN HIGHTOWER</h1>
+    <div class="tagline">CONTENT CREATOR • DIGITAL ALCHEMIST • SONIC ARCHITECT</div>
+    <div class="email">
+      <a href="mailto:BHigh3730@gmail.com">BHigh3730@gmail.com</a>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    window.addEventListener('resize', () => {
+      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+    });
+
+    // Matrix characters (katakana + numbers + symbols)
+    const matrixChars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789$+-*/=%"#&@';
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+
+    // Array of drops - one per column
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function draw() {
+      // Fade previous frame slightly (trails effect)
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#0f0'; // classic matrix green
+      ctx.font = `${fontSize}px Oxanium`;
+
+      for (let i = 0; i < drops.length; i++) {
+        // Random character
+        const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+        
+        // x = column * fontSize, y = drop * fontSize
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+
+        ctx.fillText(text, x, y);
+
+        // Reset drop when it reaches bottom + random delay
+        if (y > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 40); // ~25 fps – smooth but not too CPU heavy
+  </script>
+
+</body>
+</html>
